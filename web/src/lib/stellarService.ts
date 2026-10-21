@@ -59,3 +59,44 @@ export async function getContractInvocations(accountId: string, limit = 20) {
       transaction_hash: r.transaction_hash,
     }));
 }
+
+export interface SponsorBooking {
+  week: string;
+  accountId: string;
+  amount: string;
+  assetCode: string;
+  transactionHash: string;
+  createdAt: string;
+}
+
+export async function getSponsorBookings(
+  sponsorAccountId: string,
+  limit = 20,
+): Promise<SponsorBooking[]> {
+  const payments = await server
+    .payments()
+    .forAccount(sponsorAccountId)
+    .limit(limit)
+    .order("desc")
+    .call();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return payments.records
+    .filter((r: any) => r.type === "payment" && r.to === sponsorAccountId)
+    .map((r: any) => ({
+      week: r.memo ?? "",
+      accountId: r.from,
+      amount: r.amount,
+      assetCode: r.asset_code ?? "XLM",
+      transactionHash: r.transaction_hash,
+      createdAt: r.created_at,
+    }));
+}
+
+export async function getCurrentHeroSponsor(
+  sponsorAccountId: string,
+  week: string,
+): Promise<SponsorBooking | null> {
+  const bookings = await getSponsorBookings(sponsorAccountId);
+  return bookings.find((b) => b.week === week) ?? null;
+}
