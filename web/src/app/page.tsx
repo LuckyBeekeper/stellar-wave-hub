@@ -24,6 +24,7 @@ export default function Home() {
 	const [featured, setFeatured] = useState<Project[]>([]);
 	const [trending, setTrending] = useState<Project[]>([]);
 	const [newThisWeek, setNewThisWeek] = useState<Project[]>([]);
+	const [heroSponsor, setHeroSponsor] = useState<Project | null>(null);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -31,8 +32,9 @@ export default function Home() {
 			fetch("/api/projects?limit=6&sort=trending").then((r) => r.json()),
 			fetch("/api/projects?limit=6&sort=new-this-week").then((r) => r.json()),
 			fetch("/api/projects?limit=6&sort=top-rated").then((r) => r.json()),
+			fetch("/api/sponsors/current").then((r) => r.json()),
 		])
-			.then(([trendingRes, newRes, topRes]) => {
+			.then(([trendingRes, newRes, topRes, sponsorRes]) => {
 				if (trendingRes.status === "fulfilled") {
 					setTrending(trendingRes.value.projects || []);
 				}
@@ -41,6 +43,9 @@ export default function Home() {
 				}
 				if (topRes.status === "fulfilled") {
 					setFeatured(topRes.value.projects || []);
+				}
+				if (sponsorRes.status === "fulfilled") {
+					setHeroSponsor(sponsorRes.value.sponsor || null);
 				}
 			})
 			.catch(() => {})
@@ -115,6 +120,31 @@ export default function Home() {
 						</Link>
 					</div>
 				</div>
+
+				{heroSponsor && (
+					<div className="max-w-3xl mx-auto mt-12 relative">
+						<div className="glass rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-4 text-left">
+							<span className="tag tag-nova shrink-0">Sponsored</span>
+							<div className="flex-1 min-w-0">
+								<Link
+									href={`/projects/${heroSponsor.slug}`}
+									className="font-display font-bold text-lg text-starlight hover:text-nova-bright transition-colors"
+								>
+									{heroSponsor.name}
+								</Link>
+								<p className="text-sm text-ash truncate">
+									{heroSponsor.description}
+								</p>
+							</div>
+							<Link
+								href="/sponsor"
+								className="btn-ghost text-sm shrink-0"
+							>
+								Sponsor a week
+							</Link>
+						</div>
+					</div>
+				)}
 			</section>
 
 			{/* Stats */}
