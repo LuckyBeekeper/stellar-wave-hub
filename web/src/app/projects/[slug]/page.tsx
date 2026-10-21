@@ -4,6 +4,7 @@ import {useEffect, useState, use} from "react";
 import {useAuth} from "@/context/AuthContext";
 import StarRating from "@/components/StarRating";
 import Avatar from "@/components/Avatar";
+import VerifiedBadge from "@/components/VerifiedBadge";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -35,6 +36,7 @@ interface Project {
 	user_id: number;
 	username?: string;
 	logo_url?: string;
+	owner_verified_at?: string | null;
 	created_at: string;
 }
 
@@ -271,7 +273,7 @@ export default function ProjectDetailPage({
 			setAverages(rd.averages);
 
 			// Refresh on-chain aggregate
-			if (onChainActive) {
+			if (ON_CHAIN_ENABLED && isOnChainProject) {
 				getProjectRatingFromEvents(project.slug)
 					.then((r) => setOnChainRating(r))
 					.catch(() => {});
@@ -339,7 +341,7 @@ export default function ProjectDetailPage({
 					) : (
 						project.name[0]
 					)}
-				</div>
+					</div>
 					<div className="min-w-0 flex-1">
 						<div className="flex items-center gap-3 flex-wrap">
 							<h1 className="font-display font-bold text-3xl sm:text-4xl text-starlight">
@@ -350,6 +352,10 @@ export default function ProjectDetailPage({
 									Featured
 								</span>
 							)}
+							<VerifiedBadge
+								verifiedAt={project.owner_verified_at}
+								account={project.username}
+							/>
 						</div>
 						<div className="flex items-center gap-3 mt-2 text-sm text-ash">
 							<span>by {project.username}</span>

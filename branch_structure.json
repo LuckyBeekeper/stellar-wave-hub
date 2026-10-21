@@ -1,0 +1,24 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "fix/issue-440-verifiedbadge-on-project-cards-and-the-detail",
+    "fix/issue-459-category-sponsor-banner-on-explore",
+    "fix/issue-461-homepage-hero-sponsor-ui-and-booking-page",
+    "main",
+    "origin"
+  ],
+  "parent": {
+    "fix/issue-440-verifiedbadge-on-project-cards-and-the-detail": "main",
+    "fix/issue-459-category-sponsor-banner-on-explore": "main",
+    "fix/issue-461-homepage-hero-sponsor-ui-and-booking-page": "main",
+    "main": null,
+    "origin": "main"
+  },
+  "order": [
+    "main",
+    "fix/issue-440-verifiedbadge-on-project-cards-and-the-detail",
+    "fix/issue-459-category-sponsor-banner-on-explore",
+    "fix/issue-461-homepage-hero-sponsor-ui-and-booking-page",
+    "origin"
+  ]
+}
