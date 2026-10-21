@@ -4,6 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { hasMinRole } from "@/lib/roles";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+import { useMemo } from "react";
 
 interface Purchase {
   project_id: number;
@@ -70,6 +71,15 @@ export default function AdminRevenuePage() {
     );
   }
 
+  const summary = data?.summary ?? {
+    total_revenue: 0,
+    total_purchases: 0,
+    active_spotlights: 0,
+    expired_spotlights: 0,
+  };
+  const revenue_over_time = data?.revenue_over_time ?? [];
+  const purchases = data?.purchases ?? [];
+
   if (!user || !hasMinRole(user.role, "admin") || error?.message === "403 Forbidden") {
     return (
       <div className="min-h-[60vh] flex items-center justify-center px-4">
@@ -98,12 +108,6 @@ export default function AdminRevenuePage() {
       </div>
     );
   }
-
-  const { summary, revenue_over_time = [], purchases = [] } = data || {
-    summary: { total_revenue: 0, total_purchases: 0, active_spotlights: 0, expired_spotlights: 0 },
-    revenue_over_time: [],
-    purchases: [],
-  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
