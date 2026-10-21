@@ -3,6 +3,7 @@
 import {useEffect, useState, useCallback, Suspense} from "react";
 import {useRouter, useSearchParams, usePathname} from "next/navigation";
 import ProjectCard from "@/components/ProjectCard";
+import SponsorBanner from "@/components/SponsorBanner";
 
 const CATEGORIES = [
 	"All",
@@ -110,7 +111,6 @@ function ExplorePageContent() {
 
 	return (
 		<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-			{/* Header */}
 			<div className="mb-10 animate-in">
 				<h1 className="font-display font-bold text-3xl sm:text-4xl text-starlight mb-2">
 					Explore Projects
@@ -178,7 +178,7 @@ function ExplorePageContent() {
 							? "bg-nova text-white glow-nova"
 							: "bg-stardust/50 text-moonlight hover:bg-stardust hover:text-starlight"
 					}`}
-				>
+					>
 					<svg
 						width="14"
 						height="14"
@@ -188,7 +188,7 @@ function ExplorePageContent() {
 						strokeWidth="2"
 						strokeLinecap="round"
 						strokeLinejoin="round"
-					>
+						>
 						<polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
 					</svg>
 					Substantial only
@@ -207,13 +207,16 @@ function ExplorePageContent() {
 						className={`shrink-0 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
 							category === cat
 								? "bg-nova text-white glow-nova"
-								: "bg-stardust/50 text-moonlight hover:bg-stardust hover:text-starlight"
+							: "bg-stardust/50 text-moonlight hover:bg-stardust hover:text-starlight"
 						}`}
 					>
 						{cat}
 					</button>
 				))}
 			</div>
+
+			{/* Sponsor banner - only shown when a specific category is selected */}
+			<SponsorBanner category={category} />
 
 			{/* Results */}
 			{loading ? (
