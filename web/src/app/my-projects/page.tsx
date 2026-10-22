@@ -79,10 +79,7 @@ export default function MyProjectsPage() {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		if (!token) {
-			setLoading(false);
-			return;
-		}
+		if (!token) return;
 		fetch("/api/projects/my", {
 			headers: {Authorization: `Bearer ${token}`},
 		})
