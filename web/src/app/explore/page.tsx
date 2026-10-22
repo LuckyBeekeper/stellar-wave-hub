@@ -3,6 +3,7 @@
 import {useEffect, useMemo, useState, useCallback, Suspense} from "react";
 import {useRouter, useSearchParams, usePathname} from "next/navigation";
 import ProjectCard from "@/components/ProjectCard";
+import SponsorBanner from "@/components/SponsorBanner";
 
 const CATEGORIES = [
 	"All",
@@ -74,6 +75,14 @@ interface Project {
 	_isSponsored?: boolean;
 }
 
+interface CategorySponsor {
+	id: number;
+	name: string;
+	tagline?: string;
+	logo_url?: string;
+	url?: string;
+}
+
 interface Pagination {
 	page: number;
 	limit: number;
@@ -129,6 +138,32 @@ function ExplorePageContent() {
 		},
 		[queryString, pathname, router],
 	);
+
+	// ------------------------------------------------------------------ //
+	// Fetch category sponsor                                              //
+	// ------------------------------------------------------------------ //
+	const [sponsor, setSponsor] = useState<CategorySponsor | null>(null);
+
+	useEffect(() => {
+		if (category === "All") {
+			setSponsor(null);
+			return;
+		}
+		let cancelled = false;
+		fetch(`/api/sponsors/category/${encodeURIComponent(category.toLowerCase())}`, {
+			cache: "no-store",
+		})
+			.then((r) => (r.ok ? r.json() : {sponsor: null}))
+			.then((data) => {
+				if (!cancelled) setSponsor(data.sponsor ?? null);
+			})
+			.catch(() => {
+				if (!cancelled) setSponsor(null);
+			});
+		return () => {
+			cancelled = true;
+		};
+	}, [category]);
 
 	// ------------------------------------------------------------------ //
 	// Fetch organic results                                                //
@@ -309,6 +344,11 @@ function ExplorePageContent() {
 						</button>
 				))}
 			</div>
+
+			{/* Category sponsor banner */}
+			{category !== "All" && (
+				<SponsorBanner key={category} category={category} sponsor={sponsor} />
+			)}
 
 			{/* Results */}
 			{loading ? (
