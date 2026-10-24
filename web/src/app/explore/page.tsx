@@ -390,79 +390,8 @@ function ExplorePageContent() {
 							),
 						)}
 					</div>
-
-					{/* Pagination */}
-					{pagination.pages > 1 && (
-						<div className="flex items-center justify-center gap-2 mt-12">
-							<button
-								disabled={pagination.page <= 1}
-								onClick={() => handlePageChange(pagination.page - 1)}
-							className="btn-ghost !py-2 !px-3 disabled:opacity-30 disabled:cursor-not-allowed"
-							>
-								<svg
-									width="16"
-									height="16"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									strokeWidth="2"
-								>
-									<path d="m15 18-6-6 6-6" />
-								</svg>
-							</button>
-							<span className="text-sm text-ash px-4">
-								Page {pagination.page} of {pagination.pages}
-							</span>
-							<button
-								disabled={pagination.page >= pagination.pages}
-								onClick={() => handlePageChange(pagination.page + 1)}
-							className="btn-ghost !py-2 !px-3 disabled:opacity-30 disabled:cursor-not-allowed"
-							>
-								<svg
-									width="16"
-									height="16"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									strokeWidth="2"
-								>
-									<path d="m9 18 6-6-6-6" />
-								</svg>
-							</button>
-						</div>
-					)}
 				</>
-			) : (
-				<div className="glass rounded-2xl p-16 text-center">
-					<div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-stardust/50 flex items-center justify-center">
-						<svg
-							width="28"
-							height="28"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="var(--ash)"
-							strokeWidth="1.5"
-						>
-							<circle cx="11" cy="11" r="8" />
-							<path d="m21 21-4.3-4.3" />
-						</svg>
-					</div>
-					<h3 className="font-semibold text-lg text-moonlight mb-2">
-						No projects found
-					</h3>
-					<p className="text-ash">
-						Some projects may not be available yet. Try adjusting your search or filters.
-					</p>
-				</div>
-			)}
+			) : null}
 		</div>
-	);
-}
-
-export default function ExplorePage() {
-	return (
-		<Suspense fallback={null}>
-			<ExplorePageContent />
-		</Suspense>
 	);
 }
