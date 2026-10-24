@@ -1,4 +1,4 @@
-"tuse client";
+"use client";
 
 import { useEffect, useState } from "react";
 
@@ -57,7 +57,7 @@ export default function HeroSponsorStrip() {
         className="flex items-center gap-2 font-medium text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white"
       >
         {sponsor.logoUrl ? (
-          // eslint-disable-next-line @next/next-no-img-element
+          // eslint-disable-next-line @next/next/no-img-element
           <img src={sponsor.logoUrl} alt="" className="h-5 w-auto rounded" />
         ) : null}
         <span>{sponsor.name}</span>
