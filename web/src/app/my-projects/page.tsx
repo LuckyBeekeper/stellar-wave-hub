@@ -78,17 +78,30 @@ export default function MyProjectsPage() {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
+		let cancelled = false;
 		if (!token) {
-			setLoading(false);
-			return;
+			// Defer the state update out of the effect body.
+			Promise.resolve().then(() => {
+				if (!cancelled) setLoading(false);
+			});
+			return () => {
+				cancelled = true;
+			};
 		}
 		fetch("/api/projects/my", {
 			headers: {Authorization: `Bearer ${token}`},
 		})
 			.then((r) => r.json())
-			.then((data) => setProjects(data.projects || []))
+			.then((data) => {
+				if (!cancelled) setProjects(data.projects || []);
+			})
 			.catch(() => {})
-			.finally(() => setLoading(false));
+			.finally(() => {
+				if (!cancelled) setLoading(false);
+			});
+		return () => {
+			cancelled = true;
+		};
 	}, [token]);
 
 	if (!user) {

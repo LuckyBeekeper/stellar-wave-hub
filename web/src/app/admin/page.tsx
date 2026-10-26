@@ -1829,7 +1829,6 @@ function ContractPanel({ adminAddress, token }: { adminAddress: string; token: s
   }, []);
 
   useEffect(() => {
-    if (ON_CHAIN_ENABLED) fetchInfo();
   }, [fetchInfo]);
 
   async function run(label: string, fn: () => Promise<string>) {
@@ -2288,7 +2287,6 @@ export default function AdminPage() {
             <TabsTrigger value="users">Users</TabsTrigger>
             <TabsTrigger value="moderators">Moderators</TabsTrigger>
             <TabsTrigger value="reports">Reports</TabsTrigger>
-            <TabsTrigger value="sponsors">Sponsors</TabsTrigger>
           </TabsList>
 
           {/* ── Pending tab ── */}
@@ -2520,10 +2518,6 @@ export default function AdminPage() {
 
           <TabsContent value="reports">
             <ReportsTab token={token} />
-          </TabsContent>
-
-          <TabsContent value="sponsors">
-            <SponsorsTab token={token} />
           </TabsContent>
         </Tabs>
       </div>
