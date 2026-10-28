@@ -500,11 +500,16 @@ export default function ProjectDetailPage({
 		if (activeTab !== "updates" || !project) return;
 
 		let cancelled = false;
-		setUpdatesLoading(true);
-		setUpdatesError(null);
 
-		apiFetch<{updates: ProjectUpdate[]}>(`/api/projects/${project.slug}/updates`)
+		Promise.resolve()
+			.then(() => {
+				if (cancelled) return null;
+				setUpdatesLoading(true);
+				setUpdatesError(null);
+				return apiFetch<{updates: ProjectUpdate[]}>(`/api/projects/${project.slug}/updates`);
+			})
 			.then((data) => {
+				if (cancelled) return;
 				if (!data || !Array.isArray(data.updates)) {
 					throw new Error("Unable to load project updates.");
 				}
